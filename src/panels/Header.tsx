@@ -1,11 +1,14 @@
 import * as React from 'react';
 import PanelContext from '../PanelContext';
+import { useEffect, useState } from 'react';
+import moment from 'moment';
 
 const HIDDEN_STYLE: React.CSSProperties = {
   visibility: 'hidden',
 };
 
-export type HeaderProps = {
+export type HeaderProps<DateType> = {
+  viewDate: DateType;
   prefixCls: string;
 
   // Icons
@@ -26,10 +29,8 @@ export type HeaderProps = {
   children?: React.ReactNode;
 };
 
-function Header({
+function Header<DateType>({
   prefixCls,
-  prevIcon = '\u2039',
-  nextIcon = '\u203A',
   superPrevIcon = '\u00AB',
   superNextIcon = '\u00BB',
   onSuperPrev,
@@ -37,9 +38,16 @@ function Header({
   onPrev,
   onNext,
   children,
-}: HeaderProps) {
+  viewDate,
+}: HeaderProps<DateType>) {
   const { hideNextBtn, hidePrevBtn } = React.useContext(PanelContext);
-
+  const [isPrevVisible, setIsPrevVisible] = useState(false);
+  const [isNextVisible, setIsNextVisible] = useState(false);
+  useEffect(() => {
+    setIsPrevVisible(moment(viewDate) > moment().subtract(3, 'month'));
+    setIsNextVisible(moment(viewDate) < moment());
+  }, [viewDate]);
+  console.log('viewDate', viewDate);
   return (
     <div className={prefixCls}>
       {onSuperPrev && (
@@ -53,7 +61,7 @@ function Header({
           {superPrevIcon}
         </button>
       )}
-      {onPrev && (
+      {onPrev && isPrevVisible && (
         <button
           type="button"
           onClick={onPrev}
@@ -61,11 +69,11 @@ function Header({
           className={`${prefixCls}-prev-btn`}
           style={hidePrevBtn ? HIDDEN_STYLE : {}}
         >
-          {prevIcon}
+          {superPrevIcon}
         </button>
       )}
       <div className={`${prefixCls}-view`}>{children}</div>
-      {onNext && (
+      {onNext && isNextVisible && (
         <button
           type="button"
           onClick={onNext}
@@ -73,7 +81,7 @@ function Header({
           className={`${prefixCls}-next-btn`}
           style={hideNextBtn ? HIDDEN_STYLE : {}}
         >
-          {nextIcon}
+          {superNextIcon}
         </button>
       )}
       {onSuperNext && (

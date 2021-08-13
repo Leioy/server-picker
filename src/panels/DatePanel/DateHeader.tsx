@@ -30,7 +30,6 @@ function DateHeader<DateType>(props: DateHeaderProps<DateType>) {
     onPrevMonth,
     onNextYear,
     onPrevYear,
-    onYearClick,
     onMonthClick,
   } = props;
 
@@ -49,23 +48,29 @@ function DateHeader<DateType>(props: DateHeaderProps<DateType>) {
 
   const month = generateConfig.getMonth(viewDate);
 
-  // =================== Month & Year ===================
-  const yearNode: React.ReactNode = (
+  const yearMonthNode: React.ReactNode = (
     <button
       type="button"
-      key="year"
-      onClick={onYearClick}
+      key="month"
+      onClick={onMonthClick}
       tabIndex={-1}
-      className={`${prefixCls}-year-btn`}
+      className={`${prefixCls}-month-btn`}
     >
       {formatValue(viewDate, {
         locale,
         format: locale.yearFormat,
         generateConfig,
       })}
+      {locale.monthFormat
+        ? formatValue(viewDate, {
+            locale,
+            format: locale.monthFormat,
+            generateConfig,
+          })
+        : monthsLocale[month]}
     </button>
   );
-  const monthNode: React.ReactNode = (
+  const monthYearNode: React.ReactNode = (
     <button
       type="button"
       key="month"
@@ -80,10 +85,15 @@ function DateHeader<DateType>(props: DateHeaderProps<DateType>) {
             generateConfig,
           })
         : monthsLocale[month]}
+      {formatValue(viewDate, {
+        locale,
+        format: locale.yearFormat,
+        generateConfig,
+      })}
     </button>
   );
 
-  const monthYearNodes = locale.monthBeforeYear ? [monthNode, yearNode] : [yearNode, monthNode];
+  const monthYearNodes = locale.monthBeforeYear ? monthYearNode : yearMonthNode;
 
   return (
     <Header
@@ -93,6 +103,7 @@ function DateHeader<DateType>(props: DateHeaderProps<DateType>) {
       onPrev={onPrevMonth}
       onNext={onNextMonth}
       onSuperNext={onNextYear}
+      viewDate={viewDate}
     >
       {monthYearNodes}
     </Header>

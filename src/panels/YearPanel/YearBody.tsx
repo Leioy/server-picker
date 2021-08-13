@@ -7,8 +7,8 @@ import { formatValue, isSameYear } from '../../utils/dateUtil';
 import RangeContext from '../../RangeContext';
 import PanelBody from '../PanelBody';
 
-export const YEAR_COL_COUNT = 3;
-const YEAR_ROW_COUNT = 4;
+export const YEAR_COL_COUNT = 4;
+const YEAR_ROW_COUNT = 3;
 
 export type YearBodyProps<DateType> = {
   prefixCls: string;
@@ -60,7 +60,7 @@ function YearBody<DateType>(props: YearBodyProps<DateType>) {
       getCellText={generateConfig.getYear}
       getCellClassName={getCellClassName}
       getCellDate={generateConfig.addYear}
-      titleCell={date =>
+      titleCell={(date) =>
         formatValue(date, {
           locale,
           format: 'YYYY',
