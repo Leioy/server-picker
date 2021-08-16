@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 import type { Moment } from 'moment';
 import moment from 'moment';
 import PickerPanel from '../src/PickerPanel';
@@ -32,6 +32,15 @@ export default () => {
   const disabledDate = (current) => {
     return current > moment().endOf('day') || current < moment().subtract(3, 'month');
   };
+  const [isPrevHidden, setIsPrevHidden] = useState(false);
+  const [isNextHidden, setIsNextHidden] = useState(false);
+  useLayoutEffect(() => {
+    setIsNextHidden(moment(defaultValue).month() >= moment().month());
+  }, []);
+  const onPaneChange = (viewDate: Moment) => {
+    setIsPrevHidden(moment(viewDate) < moment().subtract(3, 'month'));
+    setIsNextHidden(moment(viewDate).month() >= moment().month());
+  };
   return (
     <div>
       <h1>Value: {value ? value.format('YYYY-MM-DD HH:mm:ss') : 'null'}</h1>
@@ -39,7 +48,14 @@ export default () => {
       <div style={{ display: 'flex', flexWrap: 'wrap', background: '#fff' }}>
         <div style={{ margin: '0 8px', padding: '8px', display: 'flex' }}>
           <div style={{ marginRight: '20px' }}>
-            <PickerPanel<Moment> {...sharedProps} disabledDate={disabledDate} locale={zhCN} />
+            <PickerPanel<Moment>
+              {...sharedProps}
+              isHiddenNextBtn={isNextHidden}
+              isHiddenPrevBtn={isPrevHidden}
+              onPanelChange={onPaneChange}
+              disabledDate={disabledDate}
+              locale={zhCN}
+            />
           </div>
           <div>
             <PickerPanel<Moment> {...sharedProps} disabledDate={disabledDate} locale={zhCN} />

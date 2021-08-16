@@ -40,6 +40,8 @@ import getRanges from './utils/getRanges';
 import { getLowerBoundTime, setDateTime, setTime } from './utils/timeUtil';
 
 export type PickerPanelSharedProps<DateType> = {
+  isHiddenPrevBtn?: boolean;
+  isHiddenNextBtn?: boolean;
   prefixCls?: string;
   className?: string;
   style?: React.CSSProperties;
@@ -101,7 +103,8 @@ export type PickerPanelDateProps<DateType> = {
 
 export type PickerPanelTimeProps<DateType> = {
   picker: 'time';
-} & PickerPanelSharedProps<DateType> & SharedTimeProps<DateType>;
+} & PickerPanelSharedProps<DateType> &
+  SharedTimeProps<DateType>;
 
 export type PickerPanelProps<DateType> =
   | PickerPanelBaseProps<DateType>
@@ -118,6 +121,8 @@ type MergedPickerPanelProps<DateType> = {
 
 function PickerPanel<DateType>(props: PickerPanelProps<DateType>) {
   const {
+    isHiddenPrevBtn = false,
+    isHiddenNextBtn = false,
     prefixCls = 'rc-picker',
     className,
     style,
@@ -527,15 +532,14 @@ function PickerPanel<DateType>(props: PickerPanelProps<DateType>) {
       </a>
     );
   }
-
   return (
     <PanelContext.Provider
       value={{
         ...panelContext,
         mode: mergedMode,
         hideHeader: 'hideHeader' in props ? hideHeader : panelContext.hideHeader,
-        hidePrevBtn: inRange && panelPosition === 'right',
-        hideNextBtn: inRange && panelPosition === 'left',
+        hidePrevBtn: (inRange && panelPosition === 'right') || isHiddenPrevBtn,
+        hideNextBtn: (inRange && panelPosition === 'left') || isHiddenNextBtn,
       }}
     >
       <div

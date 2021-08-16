@@ -103,7 +103,6 @@ function DateHeader<DateType>(props: DateHeaderProps<DateType>) {
       onPrev={onPrevMonth}
       onNext={onNextMonth}
       onSuperNext={onNextYear}
-      viewDate={viewDate}
     >
       {monthYearNodes}
     </Header>

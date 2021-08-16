@@ -1,14 +1,11 @@
 import * as React from 'react';
 import PanelContext from '../PanelContext';
-import { useEffect, useState } from 'react';
-import moment from 'moment';
 
 const HIDDEN_STYLE: React.CSSProperties = {
   visibility: 'hidden',
 };
 
 export type HeaderProps<DateType> = {
-  viewDate?: DateType;
   prefixCls: string;
 
   // Icons
@@ -38,15 +35,14 @@ function Header<DateType>({
   onPrev,
   onNext,
   children,
-  viewDate,
 }: HeaderProps<DateType>) {
   const { hideNextBtn, hidePrevBtn } = React.useContext(PanelContext);
-  const [isPrevVisible, setIsPrevVisible] = useState(false);
-  const [isNextVisible, setIsNextVisible] = useState(false);
-  useEffect(() => {
-    setIsPrevVisible(moment(viewDate) > moment().subtract(3, 'month'));
-    setIsNextVisible(moment(viewDate).month() < moment().month());
-  }, [viewDate]);
+  // const [isPrevVisible, setIsPrevVisible] = useState(false);
+  // const [isNextVisible, setIsNextVisible] = useState(false);
+  // useEffect(() => {
+  //   setIsPrevVisible(moment(viewDate) > moment().subtract(3, 'month'));
+  //   setIsNextVisible(moment(viewDate).month() < moment().month());
+  // }, [viewDate]);
   return (
     <div className={prefixCls}>
       {onSuperPrev && (
@@ -66,7 +62,7 @@ function Header<DateType>({
           onClick={onPrev}
           tabIndex={-1}
           className={`${prefixCls}-prev-btn`}
-          style={hidePrevBtn || !isPrevVisible ? HIDDEN_STYLE : {}}
+          style={hidePrevBtn ? HIDDEN_STYLE : {}}
         >
           {superPrevIcon}
         </button>
@@ -78,7 +74,7 @@ function Header<DateType>({
           onClick={onNext}
           tabIndex={-1}
           className={`${prefixCls}-next-btn`}
-          style={hideNextBtn || !isNextVisible ? HIDDEN_STYLE : {}}
+          style={hideNextBtn ? HIDDEN_STYLE : {}}
         >
           {superNextIcon}
         </button>
