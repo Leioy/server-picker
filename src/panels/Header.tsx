@@ -5,7 +5,7 @@ const HIDDEN_STYLE: React.CSSProperties = {
   visibility: 'hidden',
 };
 
-export type HeaderProps<DateType> = {
+export type HeaderProps = {
   prefixCls: string;
 
   // Icons
@@ -26,7 +26,7 @@ export type HeaderProps<DateType> = {
   children?: React.ReactNode;
 };
 
-function Header<DateType>({
+function Header({
   prefixCls,
   superPrevIcon = '\u00AB',
   superNextIcon = '\u00BB',
@@ -35,14 +35,8 @@ function Header<DateType>({
   onPrev,
   onNext,
   children,
-}: HeaderProps<DateType>) {
+}: HeaderProps) {
   const { hideNextBtn, hidePrevBtn } = React.useContext(PanelContext);
-  // const [isPrevVisible, setIsPrevVisible] = useState(false);
-  // const [isNextVisible, setIsNextVisible] = useState(false);
-  // useEffect(() => {
-  //   setIsPrevVisible(moment(viewDate) > moment().subtract(3, 'month'));
-  //   setIsNextVisible(moment(viewDate).month() < moment().month());
-  // }, [viewDate]);
   return (
     <div className={prefixCls}>
       {onSuperPrev && (
