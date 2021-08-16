@@ -1,6 +1,6 @@
 {
   "name": "server-picker",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "description": "React date & time picker base on rc-picker",
   "main": "./lib/index",
   "module": "./es/index",
