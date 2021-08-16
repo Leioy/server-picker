@@ -45,9 +45,8 @@ function Header<DateType>({
   const [isNextVisible, setIsNextVisible] = useState(false);
   useEffect(() => {
     setIsPrevVisible(moment(viewDate) > moment().subtract(3, 'month'));
-    setIsNextVisible(moment(viewDate) < moment());
+    setIsNextVisible(moment(viewDate).month() < moment().month());
   }, [viewDate]);
-  console.log('viewDate', viewDate);
   return (
     <div className={prefixCls}>
       {onSuperPrev && (
@@ -61,25 +60,25 @@ function Header<DateType>({
           {superPrevIcon}
         </button>
       )}
-      {onPrev && isPrevVisible && (
+      {onPrev && (
         <button
           type="button"
           onClick={onPrev}
           tabIndex={-1}
           className={`${prefixCls}-prev-btn`}
-          style={hidePrevBtn ? HIDDEN_STYLE : {}}
+          style={hidePrevBtn || !isPrevVisible ? HIDDEN_STYLE : {}}
         >
           {superPrevIcon}
         </button>
       )}
       <div className={`${prefixCls}-view`}>{children}</div>
-      {onNext && isNextVisible && (
+      {onNext && (
         <button
           type="button"
           onClick={onNext}
           tabIndex={-1}
           className={`${prefixCls}-next-btn`}
-          style={hideNextBtn ? HIDDEN_STYLE : {}}
+          style={hideNextBtn || !isNextVisible ? HIDDEN_STYLE : {}}
         >
           {superNextIcon}
         </button>
