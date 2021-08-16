@@ -8,7 +8,7 @@ const HIDDEN_STYLE: React.CSSProperties = {
 };
 
 export type HeaderProps<DateType> = {
-  viewDate: DateType;
+  viewDate?: DateType;
   prefixCls: string;
 
   // Icons
